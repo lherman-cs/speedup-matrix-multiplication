@@ -85,13 +85,20 @@ int main(int argc, char **argv) {
   // ******************************
   double start = timestamp();
 
+  // Transposed matrix
+  double **T = (double **)malloc(sizeof(double) * n * k);
+  for (i = 0; i < n; i++) {
+    T[i] = (double *)malloc(sizeof(double) * k);
+    for (j = 0; j < k; j++) T[i][j] = B[j][i];
+  }
+
   // **********************************
   // * Perform simple matrix multiply *
   // **********************************
-  for (j = 0; j < n; j++) {
-    for (l = 0; l < k; l++) {
-      for (i = 0; i < m; i++) {
-        C[i][j] = C[i][j] + B[l][j] * A[i][l];
+  for (i = 0; i < m; i++) {
+    for (j = 0; j < n; j++) {
+      for (l = 0; l < k; l++) {
+        C[i][j] += A[i][l] * T[j][l];
       }
     }
   }
