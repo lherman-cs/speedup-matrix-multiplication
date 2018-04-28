@@ -25,14 +25,15 @@
 #include <sys/time.h>
 
 double timestamp();
-double **dmatrix(int nrl, int nrh, int ncl, int nch);
-void nerror(char *error_text);
+double **dmatrix(register int nrl, register int nrh, register int ncl,
+                 register int nch);
+void nerror(register char *error_text);
 
 int main(int argc, char **argv) {
-  int l, m, n, k;
-  int i, j;
-  double temp;
-  double **A, **B, **C;
+  register int l, m, n, k;
+  register int i, j;
+  register double temp;
+  register double **A, **B, **C;
 
   //  ****************************************************
   //  * The following allows matrix parameters to be     *
@@ -83,10 +84,10 @@ int main(int argc, char **argv) {
   // ******************************
   // * Start embedded timing here *
   // ******************************
-  double start = timestamp();
+  register double start = timestamp();
 
   // Transposed matrix
-  double **T = (double **)malloc(sizeof(double) * n * k);
+  register double **T = (double **)malloc(sizeof(double) * n * k);
   for (i = 0; i < n; i++) {
     T[i] = (double *)malloc(sizeof(double) * k);
     for (j = 0; j < k; j++) T[i][j] = B[j][i];
@@ -106,7 +107,7 @@ int main(int argc, char **argv) {
   // ******************************
   // * Stop embedded timing here  *
   // ******************************
-  double dur = timestamp() - start;
+  register double dur = timestamp() - start;
   printf("%.6lf", dur);
 
   // **************************************************
@@ -144,11 +145,12 @@ int main(int argc, char **argv) {
 //     *******    BEGIN SUBROUTINES    ************************
 //     ********************************************************
 
-double **dmatrix(int nrl, int nrh, int ncl, int nch)
+double **dmatrix(register int nrl, register int nrh, register int ncl,
+                 register int nch)
 // Allocates a double matrix with range [nrl..nrh][ncl..nch]
 {
-  int i;
-  double **m;
+  register int i;
+  register double **m;
 
   //    Allocate pointers to rows
   m = (double **)malloc((unsigned)(nrh - nrl + 1) * sizeof(double *));
@@ -163,7 +165,7 @@ double **dmatrix(int nrl, int nrh, int ncl, int nch)
   return m;
 }
 
-void nerror(char *error_text) {
+void nerror(register char *error_text) {
   void exit();
   fprintf(stderr, "Run-time error...\n");
   fprintf(stderr, "%s\n", error_text);
