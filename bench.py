@@ -32,8 +32,7 @@ def compile():
 
 
 def main():
-    if not exists(PROG):
-        compile()
+    compile()
     benchmark([1000, 2000, 3000, 4000, 5000])
 
 
