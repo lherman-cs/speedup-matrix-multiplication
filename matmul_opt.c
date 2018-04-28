@@ -23,7 +23,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#define UNROLL(j, l, i) C[i][j] = C[i][j] + B[l][j] * A[i][l];
 
 double timestamp();
 double **dmatrix(int nrl, int nrh, int ncl, int nch);
