@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
   // * Stop embedded timing here  *
   // ******************************
   double dur = timestamp() - start;
-  printf("%.6lf", dur);
+  printf("%.6lf\n", dur);
 
   // **************************************************
   // * Print out a 10 x 10 matrix for testing only    *
