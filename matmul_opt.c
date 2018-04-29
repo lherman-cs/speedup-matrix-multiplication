@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#define BLOCK_SIZE 32
+#define BLOCK_SIZE 48
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 
 double timestamp();
