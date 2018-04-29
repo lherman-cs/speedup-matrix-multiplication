@@ -1,19 +1,27 @@
-# Register
+# Yet another register optimization
 
-This optimization might be the easiest optimization. In C, there's a keyword "register" which basically tells the compiler to use registers to store the data instead of the memory. Though, it's not guaranteed that by adding the keyword "register" that the compiler will always use registers; it's the compiler's responsibility to decide to use registers. "register" **only hints the compiler**.
+In the previous for loop of the matrix multiplication, C was being accessed multiple times and C is stored in the memory. This is **bad** because there will be a memory overhead in every iteration. So, the trick to eliminate this problem is to store C in a register and use that register to do the calculation. Later, we put the value back from the register into the memory. Following is the change:
 
-By putting the data in the registers, we could gain some more performance because registers are **fast**. Registers are in the CPU. This means there's no overhead of going to BUS and access the memory.
-
-Following is how to use the keyword, "register":
-
-Original:
+Before:
 ```c
-int row = 0;
-``` 
+for (i = 0; i < m; i++) {
+  for (j = 0; j < n; j++) {
+    for (l = 0; l < k; l++) {
+      C[i][j] += A[i][l] * T[j][l];
+    }
+  }
+}
+```
 
 After:
 ```c
-register int row = 0;
+for (i = 0; i < m; i++){
+  for (j = 0; j < n; j++) {
+    register double r = C[i][j];
+    for (l = 0; l < k; l++) {
+      r += A[i][l] * T[j][l];
+    }
+    C[i][j] = r;
+  }
+}
 ```
-
-*more detailed info: please see the full report in the master branch*
