@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#define BLOCK_SIZE 32
+#define min(a, b) (((a) < (b)) ? (a) : (b))
 
 double timestamp();
 double **dmatrix(register int nrl, register int nrh, register int ncl,
@@ -96,13 +98,21 @@ int main(int argc, char **argv) {
   // **********************************
   // * Perform simple matrix multiply *
   // **********************************
-  for (i = 0; i < m; i++) {
-    for (j = 0; j < n; j++) {
-      register double r = C[i][j];
-      for (l = 0; l < k; l++) {
-        r += A[i][l] * T[j][l];
+  register int jj = 0, ll = 0;
+
+  for (jj = 0; jj < n; jj += BLOCK_SIZE) {
+    for (ll = 0; ll < k; ll += BLOCK_SIZE) {
+      for (i = 0; i < m; i++) {
+        register int lim_j = min(jj + BLOCK_SIZE, n);
+        for (j = jj; j < lim_j; j++) {
+          register double r = C[i][j];
+          register int lim_l = min(ll + BLOCK_SIZE, k);
+          for (l = ll; l < lim_l; l++) {
+            r += A[i][l] * T[j][l];
+          }
+          C[i][j] = r;
+        }
       }
-      C[i][j] = r;
     }
   }
 
