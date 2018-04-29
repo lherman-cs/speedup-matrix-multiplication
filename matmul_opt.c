@@ -98,9 +98,11 @@ int main(int argc, char **argv) {
   // **********************************
   for (i = 0; i < m; i++) {
     for (j = 0; j < n; j++) {
+      register double r = C[i][j];
       for (l = 0; l < k; l++) {
-        C[i][j] += A[i][l] * T[j][l];
+        r += A[i][l] * T[j][l];
       }
+      C[i][j] = r;
     }
   }
 
