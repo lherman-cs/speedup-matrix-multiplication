@@ -23,6 +23,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#define op(c, a, b)              \
+  asm volatile(                  \
+      "movd %1, %%xmm0\n\t"      \
+      "movd %2, %%xmm1\n\t"      \
+      "mulpd %%xmm1, %%xmm0\n\t" \
+      "movd %%xmm0, %0"          \
+      : "=r"((c))                \
+      : "r"((a)), "r"((b)))
 
 double timestamp();
 double **dmatrix(register int nrl, register int nrh, register int ncl,
@@ -99,8 +107,10 @@ int main(int argc, char **argv) {
   for (i = 0; i < m; i++) {
     for (j = 0; j < n; j++) {
       register double r = C[i][j];
+      register double res;
       for (l = 0; l < k; l++) {
-        r += A[i][l] * T[j][l];
+        op(res, A[i][l], T[j][l]);
+        r += res;
       }
       C[i][j] = r;
     }
